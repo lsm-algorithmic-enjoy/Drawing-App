@@ -32,13 +32,24 @@ const fillBtn = document.getElementById("fill-btn");
 
 const thicknessValue = document.getElementById("thickness-value");
 
-const UNSPLASH_API_KEY = "YOUR_UNSPLASH_API_KEY_HERE"; // Unsplash API 키를 여기에 입력하세요
+const UNSPLASH_API_KEY = "pkiLsYAdsUgqArRrVVnGcNj9A0nOJsDtjHQTcZONXp8";
 const backgroundBtn = document.getElementById("background-btn");
 
-async function setRandomBackground() {
+let currentPage = 1;
+let currentSearchQuery = '';
+const imagesPerPage = 12;
+
+const modal = document.getElementById("image-search-modal");
+const closeBtn = document.querySelector(".close");
+const searchInput = document.getElementById("image-search");
+const searchBtn = document.getElementById("search-btn");
+const imagesGrid = document.querySelector(".images-grid");
+const loadMoreBtn = document.getElementById("load-more");
+
+async function searchImages(query, page = 1) {
   try {
     const response = await fetch(
-      `https://api.unsplash.com/photos/random?query=background&orientation=landscape`,
+      `https://api.unsplash.com/search/photos?query=${query}&page=${page}&per_page=${imagesPerPage}`,
       {
         headers: {
           Authorization: `Client-ID ${UNSPLASH_API_KEY}`,
@@ -46,25 +57,42 @@ async function setRandomBackground() {
       }
     );
     const data = await response.json();
-
-    const image = new Image();
-    image.crossOrigin = "anonymous";
-    image.src = data.urls.regular;
-
-    image.onload = function () {
-      // 현재 캔버스 내용을 임시로 저장
-      const imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-      // 배경 이미지 그리기
-      ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-      // 저장했던 내용을 다시 그리기
-      ctx.putImageData(imageData, 0, 0);
-    };
+    return data.results;
   } catch (error) {
-    console.error("Error fetching background:", error);
-    alert("Failed to load background image. Please try again.");
+    console.error("Error fetching images:", error);
+    return [];
   }
+}
+
+function displayImages(images) {
+  images.forEach(image => {
+    const imageItem = document.createElement("div");
+    imageItem.className = "image-item";
+
+    const img = document.createElement("img");
+    img.src = image.urls.small;
+    img.alt = image.alt_description || "Unsplash Image";
+
+    imageItem.appendChild(img);
+    imagesGrid.appendChild(imageItem);
+
+    imageItem.addEventListener("click", () => {
+      setBackgroundImage(image.urls.regular);
+      modal.style.display = "none";
+    });
+  });
+}
+
+async function setBackgroundImage(imageUrl) {
+  const image = new Image();
+  image.crossOrigin = "anonymous";
+  image.src = imageUrl;
+
+  image.onload = function () {
+    const imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    ctx.putImageData(imageData, 0, 0);
+  };
 }
 
 function onMove(event) {
@@ -217,4 +245,42 @@ destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
 saveBtn.addEventListener("click", onSaveClick);
-backgroundBtn.addEventListener("click", setRandomBackground);
+backgroundBtn.addEventListener("click", () => {
+  modal.style.display = "block";
+  imagesGrid.innerHTML = "";
+  currentPage = 1;
+});
+
+closeBtn.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+searchBtn.addEventListener("click", async () => {
+  currentSearchQuery = searchInput.value;
+  imagesGrid.innerHTML = "";
+  currentPage = 1;
+  const images = await searchImages(currentSearchQuery);
+  displayImages(images);
+});
+
+loadMoreBtn.addEventListener("click", async () => {
+  currentPage++;
+  const images = await searchImages(currentSearchQuery, currentPage);
+  displayImages(images);
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+searchInput.addEventListener("keypress", async (event) => {
+  if (event.key === "Enter") {
+    currentSearchQuery = searchInput.value;
+    imagesGrid.innerHTML = "";
+    currentPage = 1;
+    const images = await searchImages(currentSearchQuery);
+    displayImages(images);
+  }
+});

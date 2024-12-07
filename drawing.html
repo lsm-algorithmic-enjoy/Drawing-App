@@ -137,9 +137,25 @@
           ✚Add Photo
           <input type="file" accept="image/*" id="file"
         /></label>
-        <button id="background-btn">🖼️Add Random Background</button>
+        <button id="background-btn">🖼️Search & Apply Background</button>
         <button id="save">📲Save Image</button>   
         </div>
+    </div>
+    <div id="image-search-modal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Search Images</h2>
+          <span class="close">&times;</span>
+        </div>
+        <div class="search-container">
+          <input type="text" id="image-search" placeholder="Search images...">
+          <button id="search-btn">Search</button>
+        </div>
+        <div class="images-grid"></div>
+        <div class="modal-footer">
+          <button id="load-more">Load More</button>
+        </div>
+      </div>
     </div>
     <script src="app.js"></script>
   </body>
