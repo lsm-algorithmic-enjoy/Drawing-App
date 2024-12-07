@@ -89,6 +89,7 @@ async function setBackgroundImage(imageUrl) {
   image.src = imageUrl;
 
   image.onload = function () {
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   };
 }
