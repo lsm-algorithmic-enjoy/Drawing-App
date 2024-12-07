@@ -4,6 +4,7 @@ const colorOptions = Array.from(
 const modeBtn = document.getElementById("mode-btn");
 const fillscreenBtn = document.getElementById("fillscreen-btn");
 const textfillBtn = document.getElementById("textfill-btn");
+const textstrokeBtn = document.getElementById("textstroke-btn");
 const destroyBtn = document.getElementById("destroy-btn");
 const eraserBtn = document.getElementById("eraser-btn");
 const fileInput = document.getElementById("file");
@@ -106,11 +107,7 @@ function onTextAdd() {
   ctx.lineWidth = 1;
   ctx.font = "100px serif";
   ctx.textAlign = "center";
-
-  if (isTextFilling) {
-    ctx.fillText(text, x, y);
-  }
-
+  ctx.fillText(text, x, y);
   ctx.restore();
   textinput.value = "";
 }
@@ -160,13 +157,8 @@ colorOptions.forEach((color) => color.addEventListener("click", onColorClick));
 
 drawBtn.addEventListener("click", onDrawClick);
 fillBtn.addEventListener("click", onFillClick);
-fillscreenBtn.addEventListener("click", onFillScreenClick);
-textfillBtn.addEventListener("click", () => {
-  isTextFilling = true;
-  onTextAdd();
-});
+textfillBtn.addEventListener("click", onTextAdd);
 destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
 saveBtn.addEventListener("click", onSaveClick);
-
