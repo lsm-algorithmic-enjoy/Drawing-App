@@ -1,10 +1,8 @@
 const colorOptions = Array.from(
   document.getElementsByClassName("color-option")
 );
-const modeBtn = document.getElementById("mode-btn");
 const fillscreenBtn = document.getElementById("fillscreen-btn");
 const textfillBtn = document.getElementById("textfill-btn");
-const textstrokeBtn = document.getElementById("textstroke-btn");
 const destroyBtn = document.getElementById("destroy-btn");
 const eraserBtn = document.getElementById("eraser-btn");
 const fileInput = document.getElementById("file");
@@ -27,7 +25,6 @@ ctx.lineCap = "round";
 let isPainting = false;
 let isFilling = false;
 let isDrawFilling = false;
-let isTextFilling = true;
 
 const drawBtn = document.getElementById("draw-btn");
 const fillBtn = document.getElementById("fill-btn");
@@ -123,7 +120,6 @@ function onEraserClick() {
   ctx.strokeStyle = "white";
   isDrawFilling = false;
   isFilling = false;
-  modeBtn.innerText = "✋🏻DrawFill";
 }
 
 function onFileChange(event) {
@@ -157,6 +153,7 @@ colorOptions.forEach((color) => color.addEventListener("click", onColorClick));
 
 drawBtn.addEventListener("click", onDrawClick);
 fillBtn.addEventListener("click", onFillClick);
+fillscreenBtn.addEventListener("click", onFillScreenClick);
 textfillBtn.addEventListener("click", onTextAdd);
 destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
