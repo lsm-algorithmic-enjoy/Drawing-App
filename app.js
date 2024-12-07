@@ -14,8 +14,8 @@ const lineWidth = document.getElementById("line-width");
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
-const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 800;
+const CANVAS_WIDTH = 1000;
+const CANVAS_HEIGHT = 1000;
 
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
@@ -25,6 +25,7 @@ ctx.lineCap = "round";
 let isPainting = false;
 let isFilling = false;
 let isDrawFilling = false;
+let previousMode = "draw";
 
 const drawBtn = document.getElementById("draw-btn");
 const fillBtn = document.getElementById("fill-btn");
@@ -59,6 +60,7 @@ function onLineWidthChange(event) {
 function onColorChange(event) {
   ctx.strokeStyle = event.target.value;
   ctx.fillStyle = event.target.value;
+  setDrawMode(previousMode);
 }
 
 function onColorClick(event) {
@@ -66,20 +68,32 @@ function onColorClick(event) {
   ctx.strokeStyle = colorValue;
   ctx.fillStyle = colorValue;
   color.value = colorValue;
+  setDrawMode(previousMode);
+}
+
+function setDrawMode(mode) {
+  if (mode === "draw") {
+    isDrawFilling = false;
+    isFilling = false;
+    drawBtn.classList.add("active");
+    fillBtn.classList.remove("active");
+  } else if (mode === "fill") {
+    isDrawFilling = true;
+    isFilling = false;
+    drawBtn.classList.remove("active");
+    fillBtn.classList.add("active");
+  }
+  previousMode = mode;
 }
 
 function onDrawClick() {
-  isDrawFilling = false;
-  isFilling = false;
-  drawBtn.classList.add("active");
-  fillBtn.classList.remove("active");
+  setDrawMode("draw");
+  ctx.strokeStyle = color.value;
+  ctx.fillStyle = color.value;
 }
 
 function onFillClick() {
-  isDrawFilling = true;
-  isFilling = false;
-  drawBtn.classList.remove("active");
-  fillBtn.classList.add("active");
+  setDrawMode("fill");
 }
 
 function onFillScreenClick() {
@@ -110,10 +124,15 @@ function onTextAdd() {
 }
 
 function onDestroyClick() {
-  ctx.strokeStyle = ctx.fillStyle;
+  const currentColor = color.value;
+
   ctx.fillStyle = "white";
   ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-  ctx.fillStyle = ctx.strokeStyle;
+
+  ctx.strokeStyle = currentColor;
+  ctx.fillStyle = currentColor;
+
+  setDrawMode(previousMode);
 }
 
 function onEraserClick() {
