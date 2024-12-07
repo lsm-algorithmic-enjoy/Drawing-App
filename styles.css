@@ -34,9 +34,8 @@ canvas {
   flex-direction: row;
   gap: 20px;
   align-items: center;
-  justify-content: center;
   margin-bottom: 40px;
-
+  justify-content: center;
 }
 
 .color-option {
@@ -89,6 +88,7 @@ input#file {
 .draw-mode-container {
   display: flex;
   gap: 10px;
+  margin-bottom: 15px;
 }
 
 .mode-btn {
@@ -105,4 +105,9 @@ input#file {
   border: 1px solid #ddd;
   border-radius: 8px;
   box-sizing: border-box;
+}
+
+/* 추가: input이 focus 상태일 때 placeholder 숨기기 */
+#text:focus::placeholder {
+  opacity: 0;
 }
