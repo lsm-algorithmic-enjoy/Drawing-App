@@ -89,9 +89,8 @@ async function setBackgroundImage(imageUrl) {
   image.src = imageUrl;
 
   image.onload = function () {
-    const imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    ctx.putImageData(imageData, 0, 0);
   };
 }
 
