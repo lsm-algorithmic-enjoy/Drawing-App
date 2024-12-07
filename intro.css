@@ -34,9 +34,11 @@ p {
 }
 
 .features {
-    display: flex;
-    justify-content: space-around;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
     margin: 2rem 0;
+    justify-items: center;
 }
 
 .feature {
@@ -84,7 +86,8 @@ p {
     }
 
     .features {
-        flex-direction: column;
+        grid-template-columns: 1fr;
+        gap: 1rem;
     }
 
     .feature {
