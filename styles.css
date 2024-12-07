@@ -56,7 +56,7 @@ input#color {
 }
 
 button,
-label {
+label[for="file"] {
   all: unset;
   padding: 10px 0px;
   text-align: center;
@@ -65,11 +65,12 @@ label {
   font-weight: 500;
   cursor: pointer;
   border-radius: 10px;
-  transition: all0.3s ease;
+  transition: all 0.3s ease;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-button:hover {
+button:hover,
+label[for="file"]:hover {
   opacity: 1;
   background-color: #34495e;
   transform: translateY(-2px);

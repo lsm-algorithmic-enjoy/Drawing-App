@@ -32,6 +32,41 @@ const fillBtn = document.getElementById("fill-btn");
 
 const thicknessValue = document.getElementById("thickness-value");
 
+const UNSPLASH_API_KEY = "YOUR_UNSPLASH_API_KEY_HERE"; // Unsplash API 키를 여기에 입력하세요
+const backgroundBtn = document.getElementById("background-btn");
+
+async function setRandomBackground() {
+  try {
+    const response = await fetch(
+      `https://api.unsplash.com/photos/random?query=background&orientation=landscape`,
+      {
+        headers: {
+          Authorization: `Client-ID ${UNSPLASH_API_KEY}`,
+        },
+      }
+    );
+    const data = await response.json();
+
+    const image = new Image();
+    image.crossOrigin = "anonymous";
+    image.src = data.urls.regular;
+
+    image.onload = function () {
+      // 현재 캔버스 내용을 임시로 저장
+      const imageData = ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      // 배경 이미지 그리기
+      ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      // 저장했던 내용을 다시 그리기
+      ctx.putImageData(imageData, 0, 0);
+    };
+  } catch (error) {
+    console.error("Error fetching background:", error);
+    alert("Failed to load background image. Please try again.");
+  }
+}
+
 function onMove(event) {
   if (isPainting && !isDrawFilling) {
     ctx.lineTo(event.offsetX, event.offsetY);
@@ -182,3 +217,4 @@ destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
 saveBtn.addEventListener("click", onSaveClick);
+backgroundBtn.addEventListener("click", setRandomBackground);
