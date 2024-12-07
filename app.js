@@ -65,6 +65,17 @@ async function searchImages(query, page = 1) {
 }
 
 function displayImages(images) {
+  if (images.length === 0) {
+    const noResultsMsg = document.createElement("div");
+    noResultsMsg.className = "no-results-message";
+    noResultsMsg.textContent = "No images found. Please try a different search term.";
+    imagesGrid.appendChild(noResultsMsg);
+    loadMoreBtn.style.display = "none";
+    return;
+  }
+
+  loadMoreBtn.style.display = "block";
+
   images.forEach(image => {
     const imageItem = document.createElement("div");
     imageItem.className = "image-item";
