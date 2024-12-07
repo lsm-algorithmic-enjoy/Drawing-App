@@ -14,8 +14,8 @@ const lineWidth = document.getElementById("line-width");
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 
-const CANVAS_WIDTH = 1000;
-const CANVAS_HEIGHT = 1000;
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 800;
 
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
