@@ -83,3 +83,25 @@ input#text {
 input#file {
   display: none;
 }
+
+.draw-mode-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.mode-btn {
+  flex: 1;
+}
+
+.mode-btn.active {
+  background-color: #0066cc;
+}
+
+#text {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
