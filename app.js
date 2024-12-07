@@ -30,6 +30,8 @@ let previousMode = "draw";
 const drawBtn = document.getElementById("draw-btn");
 const fillBtn = document.getElementById("fill-btn");
 
+const thicknessValue = document.getElementById("thickness-value");
+
 function onMove(event) {
   if (isPainting && !isDrawFilling) {
     ctx.lineTo(event.offsetX, event.offsetY);
@@ -54,7 +56,9 @@ function cancelPainting() {
 }
 
 function onLineWidthChange(event) {
-  ctx.lineWidth = event.target.value;
+  const newWidth = event.target.value;
+  ctx.lineWidth = newWidth;
+  thicknessValue.innerText = Number(newWidth).toFixed(1);
 }
 
 function onColorChange(event) {
