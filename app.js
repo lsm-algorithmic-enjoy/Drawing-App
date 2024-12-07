@@ -89,7 +89,6 @@ async function setBackgroundImage(imageUrl) {
   image.src = imageUrl;
 
   image.onload = function () {
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     ctx.drawImage(image, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
   };
 }
@@ -143,11 +142,13 @@ function setDrawMode(mode) {
     isFilling = false;
     drawBtn.classList.add("active");
     fillBtn.classList.remove("active");
+    fillscreenBtn.classList.remove("active");
   } else if (mode === "fill") {
     isDrawFilling = true;
     isFilling = false;
     drawBtn.classList.remove("active");
     fillBtn.classList.add("active");
+    fillscreenBtn.classList.remove("active");
   }
   previousMode = mode;
 }
@@ -163,14 +164,24 @@ function onFillClick() {
 }
 
 function onFillScreenClick() {
-  isFilling = true;
+  isFilling = !isFilling;
+  fillscreenBtn.classList.toggle("active");
+
+  if (!isFilling) {
+    setDrawMode(previousMode);
+  } else {
+    drawBtn.classList.remove("active");
+    fillBtn.classList.remove("active");
+  }
 }
 
 function onCanvasClick() {
   if (isFilling) {
     ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+    isFilling = false;
+    fillscreenBtn.classList.remove("active");
+    setDrawMode(previousMode);
   }
-  isFilling = false;
 }
 
 function onTextAdd() {
