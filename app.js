@@ -163,9 +163,19 @@ colorOptions.forEach((color) => color.addEventListener("click", onColorClick));
 
 drawBtn.addEventListener("click", onDrawClick);
 fillBtn.addEventListener("click", onFillClick);
-textfillBtn.addEventListener("click", onTextAdd);
-textstrokeBtn.addEventListener("click", onTextAdd);
+fillscreenBtn.addEventListener("click", onFillScreenClick);
+textfillBtn.addEventListener("click", () => {
+  isTextFilling = true;
+  onTextAdd();
+});
+
+textstrokeBtn.addEventListener("click", () => {
+  isTextFilling = false;
+  onTextAdd();
+});
+
 destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
 saveBtn.addEventListener("click", onSaveClick);
+

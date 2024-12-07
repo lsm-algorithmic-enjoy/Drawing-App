@@ -2,9 +2,7 @@
 
 body {
   display: flex;
-  gap: 20px;
-  justify-content: space-between;
-  align-items: flex-start;
+  flex-direction:column;
   background-color: gainsboro;
   padding: 20px;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -18,8 +16,9 @@ canvas {
   border-radius: 10px;
 }
 
-body {
+.main-container {
   display: flex;
+  gap: 20px;
   justify-content: center;
   align-items: center;
 }
@@ -32,9 +31,12 @@ body {
 
 .color-options {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 20px;
   align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+
 }
 
 .color-option {
@@ -87,7 +89,6 @@ input#file {
 .draw-mode-container {
   display: flex;
   gap: 10px;
-  margin-bottom: 15px;
 }
 
 .mode-btn {
