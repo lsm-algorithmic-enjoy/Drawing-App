@@ -46,6 +46,95 @@ const searchBtn = document.getElementById("search-btn");
 const imagesGrid = document.querySelector(".images-grid");
 const loadMoreBtn = document.getElementById("load-more");
 
+let isTextMode = false;
+const undoStack = [];
+let currentStep = -1;
+
+function saveCurrentState() {
+  currentStep++;
+  if (currentStep < undoStack.length) {
+    undoStack.length = currentStep;
+  }
+  undoStack.push(canvas.toDataURL());
+}
+
+function undo() {
+  if (currentStep > 0) {
+    currentStep--;
+    const image = new Image();
+    image.src = undoStack[currentStep];
+    image.onload = function () {
+      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+      ctx.drawImage(image, 0, 0);
+    };
+  }
+}
+
+function toggleTextMode() {
+  isTextMode = !isTextMode;
+  canvas.style.cursor = isTextMode ? "text" : "default";
+  textfillBtn.classList.toggle("active");
+}
+
+function onTextAdd(event) {
+  if (!isTextMode) return;
+
+  const text = textinput.value;
+  if (text === "") return;
+
+  const x = event.offsetX;
+  const y = event.offsetY;
+
+  ctx.save();
+  ctx.lineWidth = 1;
+  ctx.font = "48px serif";
+  ctx.textAlign = "center";
+  ctx.fillText(text, x, y);
+  ctx.restore();
+
+  saveCurrentState();
+
+  isTextMode = false;
+  canvas.style.cursor = "default";
+  textfillBtn.classList.remove("active");
+  textinput.value = "";
+}
+
+canvas.addEventListener("click", (event) => {
+  if (isTextMode) {
+    onTextAdd(event);
+  } else {
+    onCanvasClick();
+  }
+});
+
+textfillBtn.addEventListener("click", toggleTextMode);
+
+const undoBtn = document.getElementById("undo-btn");
+undoBtn.addEventListener("click", undo);
+
+function onDestroyClick() {
+  const currentColor = color.value;
+  ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  ctx.strokeStyle = currentColor;
+  ctx.fillStyle = currentColor;
+  setDrawMode(previousMode);
+  saveCurrentState();
+}
+
+function cancelPainting() {
+  if (isPainting) {
+    saveCurrentState();
+  }
+  isPainting = false;
+  ctx.beginPath();
+}
+
+window.addEventListener("load", () => {
+  saveCurrentState();
+});
+
 async function searchImages(query, page = 1) {
   try {
     const response = await fetch(
@@ -123,11 +212,6 @@ function startPainting() {
   isPainting = true;
 }
 
-function cancelPainting() {
-  isPainting = false;
-  ctx.beginPath();
-}
-
 function onLineWidthChange(event) {
   const newWidth = event.target.value;
   ctx.lineWidth = newWidth;
@@ -196,34 +280,6 @@ function onCanvasClick() {
   }
 }
 
-function onTextAdd() {
-  const text = textinput.value;
-  if (text === "") return;
-
-  const x = CANVAS_WIDTH / 2;
-  const y = CANVAS_HEIGHT / 2;
-
-  ctx.save();
-  ctx.lineWidth = 1;
-  ctx.font = "100px serif";
-  ctx.textAlign = "center";
-  ctx.fillText(text, x, y);
-  ctx.restore();
-  textinput.value = "";
-}
-
-function onDestroyClick() {
-  const currentColor = color.value;
-
-  ctx.fillStyle = "white";
-  ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-  ctx.strokeStyle = currentColor;
-  ctx.fillStyle = currentColor;
-
-  setDrawMode(previousMode);
-}
-
 function onEraserClick() {
   ctx.strokeStyle = "white";
   isDrawFilling = false;
@@ -262,7 +318,7 @@ colorOptions.forEach((color) => color.addEventListener("click", onColorClick));
 drawBtn.addEventListener("click", onDrawClick);
 fillBtn.addEventListener("click", onFillClick);
 fillscreenBtn.addEventListener("click", onFillScreenClick);
-textfillBtn.addEventListener("click", onTextAdd);
+textfillBtn.addEventListener("click", toggleTextMode);
 destroyBtn.addEventListener("click", onDestroyClick);
 eraserBtn.addEventListener("click", onEraserClick);
 fileInput.addEventListener("change", onFileChange);
