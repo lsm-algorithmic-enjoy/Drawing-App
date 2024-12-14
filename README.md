@@ -48,113 +48,84 @@ Drawing App은 웹 브라우저에서 동작하는 직관적이고 다양한 기
 
 ```mermaid
 graph TB
-subgraph "Drawing App Architecture"
-subgraph "Frontend Layer"
-A[HTML5] --> |Structure| B[Canvas API]
-C[CSS3] --> |Styling| D[UI Components]
-E[Vanilla JS] --> |Logic| B
-E --> |Event Handling| D
-end
-subgraph "Core Features"
-B --> F[Drawing Tools]
-B --> G[Image Processing]
-B --> H[State Management]
-end
-subgraph "External Services"
-I[Unsplash API] --> G
-end
-subgraph "File System"
-J[Local Storage] --> G
-K[File Export] --> G
-end
-end```
+    subgraph "Frontend Architecture"
+        A[HTML Canvas] -->|Drawing Context| B[Canvas API]
+        C[Event Handlers] -->|User Interactions| B
+        D[State Management] -->|Updates| B
+        E[UI Components] -->|Controls| C
+    end
 
-```mermaid
-graph TB
-subgraph "Technology Stack"
-subgraph "Frontend Technologies"
-A[HTML5] --> |Core Technologies| D[Canvas API]
-B[CSS3] --> |Styling| E[UI/UX]
-C[JavaScript] --> |Core Logic| F[Application Logic]
-E --> G[Responsive Design]
-E --> H[Animations]
-E --> I[Layout System]
-F --> J[Event Handling]
-F --> K[State Management]
-F --> L[API Integration]
-end
-subgraph "Features"
-D --> M[Drawing Tools]
-D --> N[Image Processing]
-D --> O[Text Rendering]
-M --> P[Free Drawing]
-M --> Q[Fill Mode]
-M --> R[Eraser]
-N --> S[Image Upload]
-N --> T[Image Search]
-N --> U[Image Export]
-end
-subgraph "External API"
-V[Unsplash API] --> W[Image Search Service]
-W --> X[JSON Response]
-X --> N
-end
-end```
+    subgraph "Core Features"
+        B --> F[Drawing Tools]
+        B --> G[Image Processing]
+        B --> H[State History]
+        
+        F --> F1[Free Drawing]
+        F --> F2[Fill Mode]
+        F --> F3[Text Mode]
+        
+        G --> G1[Local Images]
+        G --> G2[Unsplash API]
+        
+        H --> H1[Undo Stack]
+        H --> H2[State Saving]
+    end
+
+    subgraph "External Services"
+        G2 --> I[Image Search]
+        I --> J[Image Grid]
+    end
+```
 
 ```mermaid
 sequenceDiagram
-participant User
-participant UI
-participant EventHandler
-participant StateManager
-participant Canvas
-participant API
-User->>UI: 사용자 입력
-UI->>EventHandler: 이벤트 발생
-EventHandler->>StateManager: 상태 업데이트 요청
-StateManager->>Canvas: 렌더링 요청
-alt 이미지 검색
-UI->>API: API 요청
-API-->>StateManager: 데이터 반환
-StateManager->>Canvas: 이미지 렌더링
-end```
+    participant User
+    participant Canvas
+    participant EventHandler
+    participant StateManager
+    participant UnsplashAPI
+
+    User->>Canvas: Draw/Click
+    Canvas->>EventHandler: Trigger Event
+    EventHandler->>StateManager: Update State
+    StateManager->>Canvas: Render Update
+    
+    alt Image Search
+        User->>EventHandler: Search Request
+        EventHandler->>UnsplashAPI: API Call
+        UnsplashAPI-->>StateManager: Return Images
+        StateManager->>Canvas: Render Background
+    end
+```
 
 ```mermaid
 graph TB
-subgraph "Component Structure"
-A[App Container]
-B[Canvas Container]
-C[Tools Container]
-D[Modal Container]
-A --> B
-A --> C
-A --> D
-B --> E[Canvas Element]
-C --> F[Color Picker]
-C --> G[Brush Tools]
-C --> H[Action Buttons]
-D --> I[Search Modal]
-D --> J[Image Grid]
-F --> K[Color Options]
-F --> L[Custom Color]
-G --> M[Brush Size]
-G --> N[Drawing Modes]
-H --> O[Save]
-H --> P[Clear]
-H --> Q[Undo]
-end```
-
-
-```mermaid
-graph LR
-subgraph "Event Handling System"
-A[User Input] --> B{Event Type}
-B -->|Mouse Events| C[Drawing Events]
-B -->|File Input| D[Image Events]
-B -->|Button Click| E[Tool Events]
-C --> F[State Update]
-D --> F
-E --> F
-F --> G[Canvas Render]
-G --> H[UI Update]
-end```
+    subgraph "Component Structure"
+        A[Main Container]
+        B[Canvas]
+        C[Tools Panel]
+        D[Search Modal]
+        
+        A --> B
+        A --> C
+        A --> D
+        
+        C --> E[Color Options]
+        C --> F[Drawing Tools]
+        C --> G[Action Buttons]
+        
+        E --> E1[Color Picker]
+        E --> E2[Preset Colors]
+        
+        F --> F1[Line Width]
+        F --> F2[Draw Modes]
+        F --> F3[Text Tool]
+        
+        G --> G1[Save]
+        G --> G2[Clear]
+        G --> G3[Undo]
+        
+        D --> D1[Search Input]
+        D --> D2[Results Grid]
+    end
+```
