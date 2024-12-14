@@ -47,49 +47,114 @@ Drawing App은 웹 브라우저에서 동작하는 직관적이고 다양한 기
 ## 시스템 아키텍처
 
 ```mermaid
-graph TD
-subgraph Frontend
-A[HTML5] --> A1[Canvas API]
-B[Vanilla JavaScript] --> B1[DOM Manipulation]
-B --> B2[Event Handling]
-B --> B3[Canvas Drawing]
-C[CSS3] --> C1[Flexbox]
-C --> C2[Grid]
-C --> C3[Animations]
+graph TB
+subgraph "Drawing App Architecture"
+subgraph "Frontend Layer"
+A[HTML5] --> |Structure| B[Canvas API]
+C[CSS3] --> |Styling| D[UI Components]
+E[Vanilla JS] --> |Logic| B
+E --> |Event Handling| D
 end
-subgraph External APIs
-D[Unsplash API] --> D1[Image Search]
-D --> D2[Image Retrieval]
+subgraph "Core Features"
+B --> F[Drawing Tools]
+B --> G[Image Processing]
+B --> H[State Management]
 end
-subgraph Development Tools
-E[Git] --> E1[Version Control]
-F[VS Code] --> F1[IDE]
-G[Mermaid.js] --> G1[Documentation]
+subgraph "External Services"
+I[Unsplash API] --> G
 end
-subgraph Features
-H[Drawing Tools] --> H1[Free Drawing]
-H --> H2[Fill]
-H --> H3[Text]
-I[Image Management] --> I1[Background]
-I --> I2[Save]
-J[History] --> J1[Undo]
+subgraph "File System"
+J[Local Storage] --> G
+K[File Export] --> G
 end
-```
+end```
+
+```mermaid
+graph TB
+subgraph "Technology Stack"
+subgraph "Frontend Technologies"
+A[HTML5] --> |Core Technologies| D[Canvas API]
+B[CSS3] --> |Styling| E[UI/UX]
+C[JavaScript] --> |Core Logic| F[Application Logic]
+E --> G[Responsive Design]
+E --> H[Animations]
+E --> I[Layout System]
+F --> J[Event Handling]
+F --> K[State Management]
+F --> L[API Integration]
+end
+subgraph "Features"
+D --> M[Drawing Tools]
+D --> N[Image Processing]
+D --> O[Text Rendering]
+M --> P[Free Drawing]
+M --> Q[Fill Mode]
+M --> R[Eraser]
+N --> S[Image Upload]
+N --> T[Image Search]
+N --> U[Image Export]
+end
+subgraph "External API"
+V[Unsplash API] --> W[Image Search Service]
+W --> X[JSON Response]
+X --> N
+end
+end```
 
 ```mermaid
 sequenceDiagram
 participant User
 participant UI
+participant EventHandler
 participant StateManager
 participant Canvas
 participant API
-User->>UI: 도구/색상 선택
-UI->>StateManager: 상태 업데이트
-StateManager->>Canvas: 드로잉 설정 적용
-User->>Canvas: 드로잉 액션
-Canvas->>StateManager: 상태 저장
-User->>UI: 이미지 검색 요청
-UI->>API: API 호출
-API->>UI: 이미지 데이터 반환
-UI->>Canvas: 이미지 렌더링
-```
+User->>UI: 사용자 입력
+UI->>EventHandler: 이벤트 발생
+EventHandler->>StateManager: 상태 업데이트 요청
+StateManager->>Canvas: 렌더링 요청
+alt 이미지 검색
+UI->>API: API 요청
+API-->>StateManager: 데이터 반환
+StateManager->>Canvas: 이미지 렌더링
+end```
+
+```mermaid
+graph TB
+subgraph "Component Structure"
+A[App Container]
+B[Canvas Container]
+C[Tools Container]
+D[Modal Container]
+A --> B
+A --> C
+A --> D
+B --> E[Canvas Element]
+C --> F[Color Picker]
+C --> G[Brush Tools]
+C --> H[Action Buttons]
+D --> I[Search Modal]
+D --> J[Image Grid]
+F --> K[Color Options]
+F --> L[Custom Color]
+G --> M[Brush Size]
+G --> N[Drawing Modes]
+H --> O[Save]
+H --> P[Clear]
+H --> Q[Undo]
+end```
+
+
+```mermaid
+graph LR
+subgraph "Event Handling System"
+A[User Input] --> B{Event Type}
+B -->|Mouse Events| C[Drawing Events]
+B -->|File Input| D[Image Events]
+B -->|Button Click| E[Tool Events]
+C --> F[State Update]
+D --> F
+E --> F
+F --> G[Canvas Render]
+G --> H[UI Update]
+end```
