@@ -43,3 +43,37 @@ Drawing App은 웹 브라우저에서 동작하는 직관적이고 다양한 기
    - 배경 이미지 검색 및 적용
    - 로컬 이미지 업로드
    - 작업 결과 저장
+
+## 시스템 아키텍처
+
+mermaid
+graph TD
+A[index.html] -->|시작| B[drawing.html]
+B --> C[Canvas 렌더링]
+B --> D[UI 컴포넌트]
+B --> E[이벤트 핸들러]
+C --> F[그리기 기능]
+C --> G[이미지 처리]
+C --> H[상태 관리]
+D --> I[컨트롤 패널]
+D --> J[모달]
+E --> K[마우스 이벤트]
+E --> L[UI 이벤트]
+M[External APIs] --> G
+
+mermaid
+sequenceDiagram
+participant User
+participant UI
+participant Canvas
+participant StateManager
+participant API
+User->>UI: 도구 선택
+UI->>StateManager: 상태 업데이트
+StateManager->>Canvas: 드로잉 설정 변경
+User->>Canvas: 드로잉 액션
+Canvas->>StateManager: 상태 저장
+User->>UI: 이미지 검색
+UI->>API: API 요청
+API->>UI: 이미지 데이터
+UI->>Canvas: 이미지 적용
