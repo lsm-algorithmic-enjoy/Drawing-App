@@ -46,34 +46,50 @@ Drawing App은 웹 브라우저에서 동작하는 직관적이고 다양한 기
 
 ## 시스템 아키텍처
 
-mermaid
+```mermaid
 graph TD
-A[index.html] -->|시작| B[drawing.html]
-B --> C[Canvas 렌더링]
-B --> D[UI 컴포넌트]
-B --> E[이벤트 핸들러]
-C --> F[그리기 기능]
-C --> G[이미지 처리]
-C --> H[상태 관리]
-D --> I[컨트롤 패널]
-D --> J[모달]
-E --> K[마우스 이벤트]
-E --> L[UI 이벤트]
-M[External APIs] --> G
+subgraph Frontend
+A[HTML5] --> A1[Canvas API]
+B[Vanilla JavaScript] --> B1[DOM Manipulation]
+B --> B2[Event Handling]
+B --> B3[Canvas Drawing]
+C[CSS3] --> C1[Flexbox]
+C --> C2[Grid]
+C --> C3[Animations]
+end
+subgraph External APIs
+D[Unsplash API] --> D1[Image Search]
+D --> D2[Image Retrieval]
+end
+subgraph Development Tools
+E[Git] --> E1[Version Control]
+F[VS Code] --> F1[IDE]
+G[Mermaid.js] --> G1[Documentation]
+end
+subgraph Features
+H[Drawing Tools] --> H1[Free Drawing]
+H --> H2[Fill]
+H --> H3[Text]
+I[Image Management] --> I1[Background]
+I --> I2[Save]
+J[History] --> J1[Undo]
+end
+```
 
-mermaid
+```mermaid
 sequenceDiagram
 participant User
 participant UI
-participant Canvas
 participant StateManager
+participant Canvas
 participant API
-User->>UI: 도구 선택
+User->>UI: 도구/색상 선택
 UI->>StateManager: 상태 업데이트
-StateManager->>Canvas: 드로잉 설정 변경
+StateManager->>Canvas: 드로잉 설정 적용
 User->>Canvas: 드로잉 액션
 Canvas->>StateManager: 상태 저장
-User->>UI: 이미지 검색
-UI->>API: API 요청
-API->>UI: 이미지 데이터
-UI->>Canvas: 이미지 적용
+User->>UI: 이미지 검색 요청
+UI->>API: API 호출
+API->>UI: 이미지 데이터 반환
+UI->>Canvas: 이미지 렌더링
+```
